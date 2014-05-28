@@ -14,13 +14,11 @@ module AkamaiRestCcu
 
     def purge_urls(urls, opt = {})
       response = request('post', BASE_URL, {:body => {:objects => urls}.merge(opt).to_json})
-      #response = HTTParty.post(@base_url, :body => {:objects => urls}.merge(opt).to_json,  :headers => { 'Content-Type' => 'application/json' })
       JSON.load(response)
     end
 
     def purge_cpcodes(cpcodes, opt = {})
       response = request('post', BASE_URL, {:body => {:type => "cpcode", :objects => cpcodes}.merge(opt).to_json})
-      #response = HTTParty.post(BASE_URL, {:body => {:type => "cpcode", :objects => cpcodes}.merge(opt).to_json})
       JSON.load(response)
     end
 

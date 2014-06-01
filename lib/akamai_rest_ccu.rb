@@ -29,8 +29,7 @@ module AkamaiRestCcu
     end
 
     def queue_length
-      url = "#{BASE_URL}"
-      response = request 'get', url
+      response = request 'get', BASE_URL
       JSON.load(response)
     end
 

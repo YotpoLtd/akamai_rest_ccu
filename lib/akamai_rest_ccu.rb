@@ -1,44 +1,42 @@
 require "akamai_rest_ccu/version"
-require 'rest_client'
+require 'httparty'
 require 'json'
 
 module AkamaiRestCcu
   class Ccu
+
+    BASE_URL = "https://api.ccu.akamai.com/ccu/v2/queues/default"
+
     def initialize(username, password)
-      @username = username
-      @password = password
-      @base_url = "https://#{@username}:#{@password}@api.ccu.akamai.com"
+      auth = {:username => username, :password => password}
+      @base_params = {:headers => { 'Content-Type' => 'application/json' }, :basic_auth => auth}
     end
 
     def purge_urls(urls, opt = {})
-      url = "#{@base_url}/ccu/v2/queues/default"
-      params = {
-        :objects => urls
-      }.merge(opt)
-      response = RestClient.post url, params.to_json, :content_type => :json
+      response = request('post', BASE_URL, {:body => {:objects => urls}.merge(opt).to_json})
       JSON.load(response)
     end
 
     def purge_cpcodes(cpcodes, opt = {})
-      url = "#{@base_url}/ccu/v2/queues/default"
-      params = {
-        :type => "cpcode",
-        :objects => cpcodes
-      }.merge(opt)
-      response = RestClient.post url, params.to_json, :content_type => :json
+      response = request('post', BASE_URL, {:body => {:type => "cpcode", :objects => cpcodes}.merge(opt).to_json})
       JSON.load(response)
     end
 
     def purge_status(progress_uri)
-      url = "#{@base_url}#{progress_uri}"
-      response = RestClient.get url
+      url = "#{BASE_URL}#{progress_uri}"
+      response = request 'get', url
       JSON.load(response)
     end
 
     def queue_length
-      url = "#{@base_url}/ccu/v2/queues/default"
-      response = RestClient.get url
+      url = "#{BASE_URL}/ccu/v2/queues/default"
+      response = request 'get', url
       JSON.load(response)
+    end
+
+    private
+    def request(method, url, params = {})
+      HTTParty.send(method, url, @base_params.merge(params))
     end
   end
 end

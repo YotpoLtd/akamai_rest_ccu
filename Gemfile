@@ -4,6 +4,5 @@ source 'https://rubygems.org'
 gemspec
 
 gem "rspec", "~> 2.0"
-
-gem "rest_client"
 gem "json"
+

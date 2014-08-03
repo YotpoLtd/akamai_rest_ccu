@@ -13,24 +13,20 @@ module AkamaiRestCcu
     end
 
     def purge_urls(urls, opt = {})
-      response = request('post', BASE_URL, {:body => {:objects => urls}.merge(opt).to_json})
-      JSON.load(response)
+      request('post', BASE_URL, {:body => {:objects => urls}.merge(opt).to_json})
     end
 
     def purge_cpcodes(cpcodes, opt = {})
-      response = request('post', BASE_URL, {:body => {:type => "cpcode", :objects => cpcodes}.merge(opt).to_json})
-      JSON.load(response)
+      request('post', BASE_URL, {:body => {:type => "cpcode", :objects => cpcodes}.merge(opt).to_json})
     end
 
     def purge_status(progress_uri)
       url = "#{BASE_URL}#{progress_uri}"
-      response = request 'get', url
-      JSON.load(response)
+      request 'get', url
     end
 
     def queue_length
-      response = request 'get', BASE_URL
-      JSON.load(response)
+      request 'get', BASE_URL
     end
 
     private
